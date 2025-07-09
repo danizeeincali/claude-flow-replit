@@ -243,6 +243,13 @@ The template supports three deployment types:
 
 ### Common Issues
 
+**Issue**: "Node.js is not installed" error
+**Solution**: 
+1. The script now auto-detects Node.js in common environments (Codespace, Replit, nvm)
+2. If still failing, manually run: `./claude-flow-replit-template/scripts/test-node-setup.sh`
+3. In Replit, Node.js should be available by default
+4. For local development, install Node.js >= 20.0.0 from [nodejs.org](https://nodejs.org)
+
 **Issue**: Claude API key not found
 **Solution**: 
 1. Check Replit Secrets configuration
@@ -251,15 +258,22 @@ The template supports three deployment types:
 
 **Issue**: Claude Flow installation fails
 **Solution**:
-1. Ensure Node.js >= 20.0.0
+1. Ensure Node.js >= 20.0.0 is properly detected
 2. Run `./claude-flow-replit-template/scripts/install-claude-flow.sh` again
 3. Check the installation logs
+4. Try manually: `npx claude-flow@alpha init --force`
 
 **Issue**: Webview not loading
 **Solution**:
 1. Ensure port 3000 is available
 2. Check firewall settings
 3. Restart the application
+
+**Issue**: Claude CLI permissions prompt
+**Solution**:
+1. The script handles this automatically
+2. If prompted manually, type `y` to proceed
+3. This is needed for Claude CLI to work properly
 
 ### Debug Mode
 

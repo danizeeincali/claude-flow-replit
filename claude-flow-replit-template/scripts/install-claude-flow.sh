@@ -35,8 +35,34 @@ fi
 
 # Check Node.js version
 print_status "Checking Node.js version..."
+
+# Source common Node.js paths
+if [ -f "$HOME/.nvm/nvm.sh" ]; then
+    source "$HOME/.nvm/nvm.sh"
+fi
+
+if [ -f "$HOME/.bashrc" ]; then
+    source "$HOME/.bashrc"
+fi
+
+# Check if node is available
 if ! command -v node &> /dev/null; then
-    print_error "Node.js is not installed. Please install Node.js >= 20.0.0"
+    # Try alternative paths
+    if [ -f "/home/codespace/nvm/current/bin/node" ]; then
+        export PATH="/home/codespace/nvm/current/bin:$PATH"
+    elif [ -f "/usr/bin/node" ]; then
+        export PATH="/usr/bin:$PATH"
+    else
+        print_error "Node.js is not installed. Please install Node.js >= 20.0.0"
+        print_error "In Replit, Node.js should be available by default."
+        print_error "Try running: nvm install 20 && nvm use 20"
+        exit 1
+    fi
+fi
+
+# Verify node is now available
+if ! command -v node &> /dev/null; then
+    print_error "Node.js is not accessible. Please check your installation."
     exit 1
 fi
 
@@ -62,6 +88,13 @@ print_status "Python version $PYTHON_VERSION is available ✓"
 
 # Install Claude Code CLI
 print_status "Installing Claude Code CLI..."
+
+# Ensure npm is available
+if ! command -v npm &> /dev/null; then
+    print_error "npm is not available. Please check your Node.js installation."
+    exit 1
+fi
+
 npm install -g @anthropic-ai/claude-code
 
 # Verify Claude installation
@@ -74,10 +107,17 @@ print_status "Claude CLI installed successfully ✓"
 
 # Configure Claude permissions for Replit
 print_status "Configuring Claude permissions for Replit..."
-claude --dangerously-skip-permissions
+echo "y" | claude --dangerously-skip-permissions || claude --dangerously-skip-permissions
 
 # Install Claude Flow
 print_status "Installing Claude Flow v2.0.0-alpha..."
+
+# Ensure npx is available
+if ! command -v npx &> /dev/null; then
+    print_error "npx is not available. Please check your Node.js installation."
+    exit 1
+fi
+
 npx --y claude-flow@alpha init --force
 
 # Verify Claude Flow installation
