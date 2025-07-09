@@ -105,9 +105,24 @@ fi
 
 print_status "Claude CLI installed successfully ✓"
 
+# Test Claude CLI without interactive mode
+print_status "Testing Claude CLI installation..."
+if claude --version &> /dev/null; then
+    print_status "Claude CLI is working correctly ✓"
+else
+    print_warning "Claude CLI may have issues in this environment"
+    print_warning "This is common in non-interactive environments"
+fi
+
 # Configure Claude permissions for Replit
 print_status "Configuring Claude permissions for Replit..."
-echo "y" | claude --dangerously-skip-permissions || claude --dangerously-skip-permissions
+# Skip permissions setup in non-interactive environments
+if [ ! -t 0 ]; then
+    print_status "Non-interactive environment detected, skipping permissions setup"
+    print_status "You may need to run 'claude --dangerously-skip-permissions' manually later"
+else
+    echo "y" | claude --dangerously-skip-permissions || true
+fi
 
 # Install Claude Flow
 print_status "Installing Claude Flow v2.0.0-alpha..."

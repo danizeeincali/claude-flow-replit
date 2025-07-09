@@ -1,0 +1,10 @@
+{
+  "environment": {
+    "platform": "replit",
+    "minimal_mode": true
+  },
+  "claude_flow": {
+    "auto_spawn": true,
+    "max_agents": 4
+  }
+}

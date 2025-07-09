@@ -21,17 +21,26 @@ Click the "Use Template" button or fork this repository to your Replit account.
 
 ### 2. Install Dependencies
 
-Run the automated installation script:
-
+**Option A: Full Installation (Recommended)**
 ```bash
 ./claude-flow-replit-template/scripts/install-claude-flow.sh
 ```
 
-This will install:
+**Option B: Minimal Installation (If Option A fails)**
+```bash
+./claude-flow-replit-template/scripts/install-claude-flow-minimal.sh
+```
+
+The full installation includes:
 - Claude Code CLI
 - Claude Flow v2.0.0-alpha.37
 - All required dependencies
 - Replit-optimized configuration
+
+The minimal installation includes:
+- Claude Flow v2.0.0-alpha.37 (core functionality)
+- Basic configuration
+- Skips Claude CLI if there are interactive mode issues
 
 ### 3. Configure Secrets
 
@@ -250,6 +259,13 @@ The template supports three deployment types:
 3. In Replit, Node.js should be available by default
 4. For local development, install Node.js >= 20.0.0 from [nodejs.org](https://nodejs.org)
 
+**Issue**: "Raw mode is not supported" error (Claude CLI)
+**Solution**: 
+1. Use the minimal installation: `./claude-flow-replit-template/scripts/install-claude-flow-minimal.sh`
+2. This installs Claude Flow without Claude CLI to avoid interactive mode issues
+3. You can still use Claude Flow: `npx claude-flow@alpha hive-mind wizard`
+4. For Claude CLI, run `./claude-flow-replit-template/scripts/setup-claude-permissions.sh` in an interactive terminal
+
 **Issue**: Claude API key not found
 **Solution**: 
 1. Check Replit Secrets configuration
@@ -259,7 +275,7 @@ The template supports three deployment types:
 **Issue**: Claude Flow installation fails
 **Solution**:
 1. Ensure Node.js >= 20.0.0 is properly detected
-2. Run `./claude-flow-replit-template/scripts/install-claude-flow.sh` again
+2. Try the minimal installation first
 3. Check the installation logs
 4. Try manually: `npx claude-flow@alpha init --force`
 
@@ -271,9 +287,9 @@ The template supports three deployment types:
 
 **Issue**: Claude CLI permissions prompt
 **Solution**:
-1. The script handles this automatically
-2. If prompted manually, type `y` to proceed
-3. This is needed for Claude CLI to work properly
+1. The script detects non-interactive environments and skips this step
+2. Run `./claude-flow-replit-template/scripts/setup-claude-permissions.sh` manually
+3. Or run `claude --dangerously-skip-permissions` in an interactive terminal
 
 ### Debug Mode
 
