@@ -1,0 +1,51 @@
+{
+  "name": "claude-flow-replit-template",
+  "version": "1.0.0",
+  "description": "A comprehensive Replit template for Claude Flow integration with best practices and UAT capabilities",
+  "main": "main.py",
+  "scripts": {
+    "install": "./scripts/install-claude-flow.sh",
+    "start": "./run.sh",
+    "test": "./scripts/test-installation.sh",
+    "setup-secrets": "python3 scripts/setup-secrets.py",
+    "dev": "python3 main.py",
+    "claude-flow": "npx claude-flow@alpha",
+    "hive-mind": "npx claude-flow@alpha hive-mind wizard",
+    "claude": "claude"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-code": "^1.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
+  },
+  "keywords": [
+    "claude",
+    "claude-flow",
+    "replit",
+    "ai",
+    "automation",
+    "template",
+    "hive-mind",
+    "swarm"
+  ],
+  "author": "Claude Flow Community",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ruvnet/claude-flow"
+  },
+  "bugs": {
+    "url": "https://github.com/ruvnet/claude-flow/issues"
+  },
+  "homepage": "https://github.com/ruvnet/claude-flow#readme",
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
+  "replit": {
+    "language": "python",
+    "run": "python3 main.py",
+    "entrypoint": "main.py"
+  }
+}

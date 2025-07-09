@@ -1,0 +1,59 @@
+entrypoint = "main.py"
+modules = ["python-3.10:v18-20230807-322e88b", "nodejs-20:v8-20230920-bd784b9"]
+
+[nix]
+channel = "stable-23_05"
+
+[deployment]
+run = ["python3", "main.py"]
+deploymentTarget = "cloudrun"
+publicDir = "public"
+
+[interpreter]
+command = ["python3", "-u", "main.py"]
+
+[env]
+PATH = "/home/runner/.local/bin:$PATH"
+PYTHONPATH = "/home/runner/$REPL_SLUG:$PYTHONPATH"
+NODE_PATH = "/home/runner/$REPL_SLUG/node_modules"
+
+[gitHubImport]
+requiredFiles = [".replit", "replit.nix", "main.py"]
+
+[languages.python]
+pattern = "**/*.py"
+[languages.python.languageServer]
+start = ["pylsp"]
+
+[languages.javascript]
+pattern = "**/*.{js,jsx,ts,tsx}"
+[languages.javascript.languageServer]
+start = ["typescript-language-server", "--stdio"]
+
+[languages.css]
+pattern = "**/*.css"
+[languages.css.languageServer]
+start = ["vscode-css-language-server", "--stdio"]
+
+[languages.html]
+pattern = "**/*.html"
+[languages.html.languageServer]
+start = ["vscode-html-language-server", "--stdio"]
+
+[unitTest]
+language = "python"
+
+[packager]
+language = "python3"
+[packager.features]
+enabledForHosting = false
+packageSearch = true
+guessImports = true
+
+[debugger]
+support = true
+[debugger.interactive]
+transport = "localhost:5678"
+startCommand = ["python3", "-m", "debugpy", "--listen", "0.0.0.0:5678", "--wait-for-client", "-m", "main"]
+[debugger.interactive.integratedAdapter]
+dapTcpAddress = "localhost:5678"

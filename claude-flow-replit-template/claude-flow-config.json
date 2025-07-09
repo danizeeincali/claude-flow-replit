@@ -1,0 +1,30 @@
+{
+  "version": "2.0.0-alpha.37",
+  "platform": "replit",
+  "features": {
+    "hive_mind": true,
+    "neural_training": true,
+    "github_integration": true,
+    "memory_persistence": true,
+    "auto_scaling": true
+  },
+  "replit": {
+    "webview_port": 3000,
+    "secrets_support": true,
+    "deployment_ready": true,
+    "uat_testing": true
+  },
+  "agents": {
+    "default_topology": "hierarchical",
+    "max_agents": 8,
+    "auto_spawn": true,
+    "specializations": [
+      "researcher", "coder", "analyst", "tester", "architect", "coordinator"
+    ]
+  },
+  "memory": {
+    "persistence": true,
+    "cross_session": true,
+    "namespace": "replit-template"
+  }
+}

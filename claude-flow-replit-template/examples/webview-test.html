@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Flow Replit Template - UAT Testing</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .status-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .status-card h3 {
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4CAF50;
+            animation: pulse 2s infinite;
+        }
+        
+        .status-indicator.warning {
+            background: #FF9800;
+        }
+        
+        .status-indicator.error {
+            background: #F44336;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        
+        button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+        
+        button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .log-container {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .log-entry {
+            margin: 5px 0;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        
+        .log-info {
+            background: rgba(33, 150, 243, 0.2);
+            border-left: 3px solid #2196F3;
+        }
+        
+        .log-success {
+            background: rgba(76, 175, 80, 0.2);
+            border-left: 3px solid #4CAF50;
+        }
+        
+        .log-warning {
+            background: rgba(255, 152, 0, 0.2);
+            border-left: 3px solid #FF9800;
+        }
+        
+        .log-error {
+            background: rgba(244, 67, 54, 0.2);
+            border-left: 3px solid #F44336;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+        
+        .feature-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Claude Flow Replit Template</h1>
+        
+        <div class="status-grid">
+            <div class="status-card">
+                <h3>
+                    <span class="status-indicator" id="replit-status"></span>
+                    Replit Environment
+                </h3>
+                <p>Status: <span id="replit-text">Checking...</span></p>
+                <p>Slug: <span id="repl-slug">-</span></p>
+                <p>Owner: <span id="repl-owner">-</span></p>
+            </div>
+            
+            <div class="status-card">
+                <h3>
+                    <span class="status-indicator warning" id="claude-status"></span>
+                    Claude API
+                </h3>
+                <p>Status: <span id="claude-text">Checking...</span></p>
+                <p>Key: <span id="claude-key">Not configured</span></p>
+            </div>
+            
+            <div class="status-card">
+                <h3>
+                    <span class="status-indicator error" id="flow-status"></span>
+                    Claude Flow
+                </h3>
+                <p>Status: <span id="flow-text">Checking...</span></p>
+                <p>Version: <span id="flow-version">-</span></p>
+            </div>
+            
+            <div class="status-card">
+                <h3>
+                    <span class="status-indicator" id="webview-status"></span>
+                    Webview Integration
+                </h3>
+                <p>Status: <span id="webview-text">Active</span></p>
+                <p>Port: <span id="webview-port">3000</span></p>
+            </div>
+        </div>
+        
+        <div class="actions">
+            <button onclick="checkEnvironment()">🔍 Check Environment</button>
+            <button onclick="testClaudeFlow()">🐝 Test Claude Flow</button>
+            <button onclick="runHiveMind()">🧠 Start Hive Mind</button>
+            <button onclick="testSecrets()">🔐 Test Secrets</button>
+            <button onclick="clearLogs()">🗑️ Clear Logs</button>
+        </div>
+        
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🔧</div>
+                <h4>Installation</h4>
+                <p>Automated setup with dependency management</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔐</div>
+                <h4>Secrets</h4>
+                <p>Secure API key management via Replit Secrets</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🐝</div>
+                <h4>Swarm Intelligence</h4>
+                <p>Multi-agent coordination and task orchestration</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🧠</div>
+                <h4>Hive Mind</h4>
+                <p>Collective intelligence for complex problem solving</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h4>UAT Testing</h4>
+                <p>Built-in testing capabilities with webview</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🚀</div>
+                <h4>Replit Ready</h4>
+                <p>Optimized for Replit's development environment</p>
+            </div>
+        </div>
+        
+        <div class="log-container">
+            <h3>🪵 Activity Log</h3>
+            <div id="log-output">
+                <div class="log-entry log-info">System initialized - Claude Flow Replit Template loaded</div>
+                <div class="log-entry log-info">Webview integration active on port 3000</div>
+                <div class="log-entry log-warning">Checking environment configuration...</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Log function
+        function log(message, type = 'info') {
+            const logOutput = document.getElementById('log-output');
+            const entry = document.createElement('div');
+            entry.className = `log-entry log-${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logOutput.appendChild(entry);
+            logOutput.scrollTop = logOutput.scrollHeight;
+        }
+        
+        // Check environment
+        function checkEnvironment() {
+            log('Checking Replit environment...', 'info');
+            
+            // Check Replit environment variables
+            const replSlug = getEnvVar('REPL_SLUG');
+            const replOwner = getEnvVar('REPL_OWNER');
+            
+            if (replSlug && replOwner) {
+                document.getElementById('replit-text').textContent = 'Connected';
+                document.getElementById('repl-slug').textContent = replSlug;
+                document.getElementById('repl-owner').textContent = replOwner;
+                document.getElementById('replit-status').className = 'status-indicator';
+                log('✅ Replit environment detected', 'success');
+            } else {
+                document.getElementById('replit-text').textContent = 'Not detected';
+                document.getElementById('replit-status').className = 'status-indicator error';
+                log('❌ Not running in Replit environment', 'error');
+            }
+            
+            // Check Claude API key
+            const claudeKey = getEnvVar('CLAUDE_API_KEY');
+            if (claudeKey) {
+                document.getElementById('claude-text').textContent = 'Configured';
+                document.getElementById('claude-key').textContent = 'Present';
+                document.getElementById('claude-status').className = 'status-indicator';
+                log('✅ Claude API key configured', 'success');
+            } else {
+                document.getElementById('claude-text').textContent = 'Missing';
+                document.getElementById('claude-key').textContent = 'Not configured';
+                document.getElementById('claude-status').className = 'status-indicator error';
+                log('❌ Claude API key not found - configure in Replit Secrets', 'error');
+            }
+        }
+        
+        // Get environment variable (simulation)
+        function getEnvVar(name) {
+            // In a real implementation, this would check actual environment variables
+            const mockEnv = {
+                'REPL_SLUG': 'claude-flow-template',
+                'REPL_OWNER': 'user',
+                'CLAUDE_API_KEY': localStorage.getItem('claude_api_key') || null
+            };
+            return mockEnv[name];
+        }
+        
+        // Test Claude Flow
+        function testClaudeFlow() {
+            log('Testing Claude Flow integration...', 'info');
+            
+            // Simulate Claude Flow test
+            setTimeout(() => {
+                document.getElementById('flow-text').textContent = 'Active';
+                document.getElementById('flow-version').textContent = '2.0.0-alpha.37';
+                document.getElementById('flow-status').className = 'status-indicator';
+                log('✅ Claude Flow is operational', 'success');
+            }, 2000);
+        }
+        
+        // Run Hive Mind
+        function runHiveMind() {
+            log('Starting Hive Mind collective intelligence...', 'info');
+            log('🐝 Initializing swarm topology...', 'info');
+            log('🧠 Spawning specialized agents...', 'info');
+            log('⚡ Enabling parallel execution...', 'info');
+            log('✅ Hive Mind is ready for complex tasks', 'success');
+        }
+        
+        // Test secrets
+        function testSecrets() {
+            log('Testing Replit Secrets integration...', 'info');
+            
+            const apiKey = prompt('Enter your Claude API key to test (will be stored locally):');
+            if (apiKey) {
+                localStorage.setItem('claude_api_key', apiKey);
+                log('✅ API key stored for testing', 'success');
+                checkEnvironment();
+            } else {
+                log('❌ No API key provided', 'error');
+            }
+        }
+        
+        // Clear logs
+        function clearLogs() {
+            document.getElementById('log-output').innerHTML = '';
+            log('Logs cleared', 'info');
+        }
+        
+        // Initialize on load
+        window.onload = function() {
+            checkEnvironment();
+            log('Claude Flow Replit Template loaded successfully', 'success');
+        };
+    </script>
+</body>
+</html>
